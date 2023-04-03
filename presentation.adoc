@@ -7,8 +7,7 @@
 [.columns,.red.background]
 == Text Blocks
 
-[%step]
-[.column]
+[%step,.column]
 --
 Before
 [source,java,linenums]
@@ -16,9 +15,7 @@ Before
 String x = "asfjasf;lkja";
 ----
 --
-
-[%step]
-[.column]
+[%step,.column]
 --
 After
 [source,java,highlight=2..4]
