@@ -1,2 +1,4 @@
 reveal.js
+build/
+node_modules/
 *.html

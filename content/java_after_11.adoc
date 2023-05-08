@@ -1,1 +1,35 @@
 = Java after 11
+
+== What's new?
+
+* Better NullPointerExceptions
+* Garbage Collection Improvements
+* Text Blocks
+* Pattern matching for instanceof
+* Switch Expressions
+* Records
+* Sealed Classes
+* And more!
+
+== Beter NullpointerExceptions
+
+[source,java]
+----
+a.b.c.i = 99; // Throws a NullPointerException
+----
+
+.Before
+[source,txt]
+----
+Exception in thread "main" java.lang.NullPointerException at Prog.main(Prog.java:5)
+----
+
+.After
+[source,txt]
+----
+Exception in thread "main" java.lang.NullPointerException: Cannot read field "c" because "a.b" is null ...
+----
+
+== Garbage Collection (GC)
+
+== Conclusion
