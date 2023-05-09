@@ -1,4 +1,7 @@
 = Java after 11
+:revealjsdir: ../node_modules/reveal.js
+:revealjs_theme: night
+:source-highlighter: highlightjs
 
 == What's new?
 
