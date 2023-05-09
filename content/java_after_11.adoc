@@ -1,7 +1,4 @@
 = Java after 11
-:revealjsdir: ../node_modules/reveal.js
-:revealjs_theme: night
-:source-highlighter: highlightjs
 
 == What's new?
 
@@ -24,15 +21,44 @@ a.b.c.i = 99; // Throws a NullPointerException
 .Before
 [source,txt]
 ----
-Exception in thread "main" java.lang.NullPointerException at Prog.main(Prog.java:5)
+NullPointerException at Prog.main(Prog.java:5)
 ----
 
 .After
 [source,txt]
 ----
-Exception in thread "main" java.lang.NullPointerException: Cannot read field "c" because "a.b" is null ...
+NullPointerException: Cannot read field "c" because "a.b" is null ...
 ----
 
 == Garbage Collection (GC)
+
+=== GC Trade-offs
+
+[horizontal]
+Throughput:: How much time is spent doing actual application work vs GC work?
+Latency:: How does GC affect individual app operations?
+Footprint:: How much extra memory is needed for the GC?
+
+=== Java GCs
+
+[horizontal]
+Serial:: simple, single threaded
+Parallel:: throughput
+G1 (default):: balance of throughput and latency
+Shenandoah:: latency
+ZGC:: latency
+Epsilon:: no-op collector
+
+=== Java 17 GC Benchmarks
+
+.https://kstefanj.github.io/2021/11/24/gc-progress-8-17.html[Stefan Johansson - GC progress from JDK 8 to JDK 17]
+|===
+a|
+
+image::https://kstefanj.github.io/assets/posts/gc-8-17/throughput.png[]
+a|
+
+image::https://kstefanj.github.io/assets/posts/gc-8-17/latency.png[]
+|===
 
 == Conclusion
