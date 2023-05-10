@@ -130,6 +130,175 @@ public final boolean equals(Object o) {
 }
 ----
 
+== Switch Expressions
+
+.Before
+[,java]
+----
+int numLetters; // gross
+switch (day) {
+    case MONDAY:
+    case FRIDAY:
+    case SUNDAY:
+        numLetters = 6;
+        break;
+    case TUESDAY:
+        numLetters = 7;
+        break;
+    // Thursday, Saturday, Wednesday...
+}
+----
+
+.After
+[,java]
+----
+int numLetters = switch (day) {
+    // Arrows means no breaks needed, they don't "fall through"
+    case MONDAY, FRIDAY, SUNDAY -> 6;
+    case TUESDAY                -> 7;
+    case THURSDAY, SATURDAY     -> 8;
+    case WEDNESDAY              -> 9;
+}
+----
+
+* Expression returns a value
+* Must be exhaustive, but `default` is not required
+
+== Records
+
+.Before
+[,java]
+----
+final class Range {
+    private final int start;
+    private final int end;
+
+    Range(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    public int start() { return start; }
+    public int end() { return end; }
+    public boolean equals(Object o) { /*...*/ }
+    public int hashCode() { /*...*/ }
+    public String toString() { /*...*/ }
+}
+----
+
+.After
+[,java]
+----
+record Range(int start, int end) { }
+----
+
+Usage:
+[,java]
+----
+var range = new Range(2, 3);
+System.out.println(range.start());
+System.out.println(range.end);
+----
+
+=== Record Properties
+
+* Immutable
+* Transparent
+* Can't extend any class (implicitly extends record)
+* Can't be extended
+* Can implement interfaces
+
+=== Record Constructors
+
+* Automatically given `canonical constructors`
+    * *All* constructors must ultimately call it
+
+[,java]
+----
+record Range(int start, int end) {
+    // Canonical constructor that uses the compact syntax
+    Range {
+        if (end < start) { throw new IllegalArgumentException("start must be less than end"); }
+    }
+
+    // Has to use the canonical constructor
+    Range(int end) { this(0, end); }
+}
+----
+
+== Sealed Classes
+
+[,java]
+----
+class Shape { } // No limits to extension
+----
+
+[,java]
+----
+final class Shape { } // Nothing can extend
+----
+
+* Enables more fine-grained inheritance control
+
+[,java]
+----
+sealed class Shape {
+    permits Circle, Rectangle, Triangle {
+} 
+class Circle extends Shape { }
+class Rectangle extends Shape { }
+class Triangle extends Shape { }
+----
+
+== Data Oriented Programming
+
+=== What happens when we combine these?
+
+* Pattern Matching
+* Switch Expressions
+* Records
+* Sealed Classes
+
+=== AsyncResult Example
+[,java]
+----
+sealed interface AsyncResult<V> {
+    record Success<V>(V result) implements AsyncResult<V> { }
+    record Failure<V>(Throwable cause) implements AsyncResult<V> { }
+    record Timeout<V>() implements AsyncResult<V> { }
+    record Interrupted<V>() implements AsyncResult<V> { }
+}
+----
+
+[,java]
+----
+AsyncResult<V> r = future.get();
+switch (r) {
+    case Success<V>(var result): ...
+    case Failure<V>(Throwable cause): ...
+    case Timeout<V>(): ...
+    case Interrupted<V>(): ...
+}
+----
+
+== Stream::toList
+
+.Before
+[,java]
+----
+var nums = IntStream.range(0, 10)
+                    .boxed()
+                    .collect(Collectors.toList());
+----
+
+.After
+[,java]
+----
+var nums = IntStream.range(0, 10)
+                    .boxed()
+                    .toList();
+----
+
 == Conclusion
 
 * Java 17 improves...
@@ -141,4 +310,4 @@ public final boolean equals(Object o) {
         *** Pattern matching, switch expressions, and records
     ** Developer Flexibility
         *** Sealed classes
-        *** Oriented Programming ([Brian Goetz Article](https://www.infoq.com/articles/data-oriented-programming-java))
+        *** Data Oriented Programming (https://www.infoq.com/articles/data-oriented-programming-java[Brian Goetz Article])
