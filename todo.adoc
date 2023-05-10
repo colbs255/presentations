@@ -1,11 +1,10 @@
 = TODO
 
 * GC comparison one page
-* Remove `Table 1`
 * Animations for before and after
 * Switch expressions are exhaustive not statements
 * Multiline text blocks
-* Code scroll
+* Code scroll (fit in screen?)
 * Colors
 * Make font smaller
 * Spellcheck
