@@ -13,19 +13,19 @@
 
 == Beter NullpointerExceptions
 
-[source,java]
+[,java]
 ----
 a.b.c.i = 99; // Throws a NullPointerException
 ----
 
 .Before
-[source,txt]
+[,txt]
 ----
 NullPointerException at Prog.main(Prog.java:5)
 ----
 
 .After
-[source,txt]
+[,txt]
 ----
 NullPointerException: Cannot read field "c" because "a.b" is null ...
 ----
@@ -61,4 +61,84 @@ a|
 image::https://kstefanj.github.io/assets/posts/gc-8-17/latency.png[]
 |===
 
+== Text Blocks
+
+.Before
+[,java]
+----
+String grossJson = "{\n\"id\": 1,\n\"qty\": 5,\n\"price\": 100.00}";
+----
+
+.After
+[,java]
+----
+String prettyJson = """
+            {
+                "id": 1,
+                "qty": 5,
+                "price": 100
+            }
+            """;
+----
+
+== Pattern Matching for instanceof
+
+=== Example 1
+
+.Before
+[,java]
+----
+Object o = someRandomObject();
+if (o instanceof String) {
+    String s = (String)o;
+    // do something with String s...
+} else if (o instanceof Number) {
+    Number n = (Number)o;
+    // do something with Number n...
+}
+----
+
+.After
+[,java]
+----
+Object o = someRandomObject();
+if (o instanceof String s) {
+    // do something with String s...
+} else if (o instanceof Number n) {
+    // do something with Number n...
+}
+----
+
+=== Example 2
+
+.Before
+[,java]
+----
+public final boolean equals(Object o) {
+    if (!(o instanceof Point)) return false;
+    Point other = (Point) o;
+    return x == other.x && y == other.y;
+}
+----
+
+.After
+[,java]
+----
+public final boolean equals(Object o) {
+    return (o instanceof Point other)
+        && x == other.x && y == other.y;
+}
+----
+
 == Conclusion
+
+* Java 17 improves...
+    ** System Performance
+        *** Enhanced garbage collectors
+    ** Developer Velocity
+        *** Better null pointer exceptions
+        *** Text blocks, `Stream::toList`
+        *** Pattern matching, switch expressions, and records
+    ** Developer Flexibility
+        *** Sealed classes
+        *** Oriented Programming ([Brian Goetz Article](https://www.infoq.com/articles/data-oriented-programming-java))
