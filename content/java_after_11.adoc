@@ -11,7 +11,7 @@
 * Sealed Classes
 * And more!
 
-== Beter NullpointerExceptions
+== Better NullpointerExceptions
 
 [,java]
 ----

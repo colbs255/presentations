@@ -8,3 +8,4 @@
 * Code scroll
 * Colors
 * Make font smaller
+* Spellcheck

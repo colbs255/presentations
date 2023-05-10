@@ -1,4 +1,4 @@
-attributes := -a revealjs_theme=night -a source-highlighter=highlightjs -a revealjsdir=../node_modules/reveal.js
+attributes := -a revealjs_theme=black -a source-highlighter=highlightjs -a revealjsdir=../node_modules/reveal.js
 all: build
 bootstrap:
 	npm i --save asciidoctor @asciidoctor/reveal.js
