@@ -2,7 +2,7 @@
 
 * GC comparison one page
 * Animations for before and after
-* Switch expressions are exhaustive not statements
+* arrangement
 * Code scroll (fit in screen?)
 * Colors
 * Make font smaller

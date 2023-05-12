@@ -90,7 +90,7 @@ String prettyJson = """
 ----
 String normalString = "This is a lot of text that "
         + "is meant to all be on the same line. "
-        + "Which example looks better to you? "
+        + "Which example looks better? "
         + "Which example looks more maintainable?";
 ----
 
@@ -100,7 +100,7 @@ String normalString = "This is a lot of text that "
 String textBlockString = """
         This is a lot of text that \
         is meant to all be on the same line. \
-        Which example looks better to you? \
+        Which example looks better? \
         Which example looks more maintainable?""";
 ----
 
@@ -186,6 +186,18 @@ int numLetters = switch (day) {
 
 * Expression returns a value
 * Must be exhaustive, but `default` is not required
+
+=== Switch statements
+
+Switch statements do not have to be exhaustive (for backwards compatibility)
+
+[,java]
+----
+switch (day) {
+    case MONDAY -> System.out.println("Sounds like somebody's got a case of the Mondays!");
+    case FRIDAY -> System.out.println("Have a good weekend!");
+}
+----
 
 == Records
 
