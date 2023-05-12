@@ -63,6 +63,8 @@ image::https://kstefanj.github.io/assets/posts/gc-8-17/latency.png[]
 
 == Text Blocks
 
+=== Indentation and Escaping
+
 .Before
 [,java]
 ----
@@ -79,6 +81,27 @@ String prettyJson = """
                 "price": 100
             }
             """;
+----
+
+=== Long lines
+
+.Before
+[,java]
+----
+String normalString = "This is a lot of text that "
+        + "is meant to all be on the same line. "
+        + "Which example looks better to you? "
+        + "Which example looks more maintainable?";
+----
+
+.After
+[,java]
+----
+String textBlockString = """
+        This is a lot of text that \
+        is meant to all be on the same line. \
+        Which example looks better to you? \
+        Which example looks more maintainable?""";
 ----
 
 == Pattern Matching for instanceof
@@ -310,4 +333,4 @@ var nums = IntStream.range(0, 10)
         *** Pattern matching, switch expressions, and records
     ** Developer Flexibility
         *** Sealed classes
-        *** Data Oriented Programming (https://www.infoq.com/articles/data-oriented-programming-java[Brian Goetz Article])
+        *** https://www.infoq.com/articles/data-oriented-programming-java[Data Oriented Programming]
