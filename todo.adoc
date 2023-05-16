@@ -7,3 +7,4 @@
 * Colors
 * Make font smaller
 * Spellcheck
+* github action
