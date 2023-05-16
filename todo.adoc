@@ -1,10 +1,8 @@
 = TODO
 
-* GC comparison one page
 * Animations for before and after
-* arrangement
-* Code scroll (fit in screen?)
+    ** split before and after?
 * Colors
-* Make font smaller
+* Make code font smaller
 * Spellcheck
-* github action
+* github action: Autogenerate index page with all slides

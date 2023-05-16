@@ -51,15 +51,17 @@ Epsilon:: no-op collector
 
 === Java 17 GC Benchmarks
 
-.https://kstefanj.github.io/2021/11/24/gc-progress-8-17.html[Stefan Johansson - GC progress from JDK 8 to JDK 17]
-|===
-a|
+https://kstefanj.github.io/2021/11/24/gc-progress-8-17.html[Stefan Johansson - GC progress from JDK 8 to JDK 17]
+
+[%notitle]
+=== Throughput benchmark
 
 image::https://kstefanj.github.io/assets/posts/gc-8-17/throughput.png[]
-a|
+
+[%notitle]
+=== Latency benchmark
 
 image::https://kstefanj.github.io/assets/posts/gc-8-17/latency.png[]
-|===
 
 == Text Blocks
 
@@ -251,9 +253,12 @@ System.out.println(range.end);
 [,java]
 ----
 record Range(int start, int end) {
+
     // Canonical constructor that uses the compact syntax
     Range {
-        if (end < start) { throw new IllegalArgumentException("start must be less than end"); }
+        if (end < start) {
+            throw new IllegalArgumentException("start must be less than end");
+        }
     }
 
     // Has to use the canonical constructor
