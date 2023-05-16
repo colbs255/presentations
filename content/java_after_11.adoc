@@ -68,7 +68,7 @@ image::https://kstefanj.github.io/assets/posts/gc-8-17/latency.png[]
 .Before
 [,java]
 ----
-String grossJson = "{\n\"id\": 1,\n\"qty\": 5,\n\"price\": 100.00}";
+String grossJson = "{\n\"id\": 1,\n\"qty\": 5,\n\"price\": 1}";
 ----
 
 .After
@@ -78,7 +78,7 @@ String prettyJson = """
             {
                 "id": 1,
                 "qty": 5,
-                "price": 100
+                "price": 1
             }
             """;
 ----
