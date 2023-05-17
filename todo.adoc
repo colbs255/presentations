@@ -5,4 +5,4 @@
 * Colors
 * Make code font smaller
 * Spellcheck
-* github action: Autogenerate index page with all slides
+* github pages
