@@ -4,6 +4,7 @@ bootstrap:
 	npm i --save asciidoctor @asciidoctor/reveal.js
 build:
 	npx asciidoctor-revealjs content/*.adoc --destination-dir build $(attributes)
+	npx asciidoctor index.adoc --destination-dir build
 clean:
 	-rm -rf build
 
