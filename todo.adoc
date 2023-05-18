@@ -1,7 +1,0 @@
-= TODO
-
-* Animations for before and after
-    ** split before and after?
-* Colors
-* Make code font smaller
-* Spellcheck
