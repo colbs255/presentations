@@ -1,12 +1,14 @@
-all: build run
-reveal.js:
-	echo Downloading reveal.js
-	git clone -b 3.9.2 --depth 1 https://github.com/hakimel/reveal.js.git
-	rm -rf reveal.js/.git
-build: reveal.js
-	asciidoctor-revealjs presentation.adoc	
-run:
-	open presentation.html
+attributes := -a revealjs_theme=white -a source-highlighter=highlightjs -a revealjsdir=../node_modules/reveal.js -a table-caption! -a revealjs_margin=.05 -a revealjs_height=800 -a revealjs_width=1000
+
+all: bootstrap build
+build:
+	mkdir build
+	node scripts/build_adoc_index.js
+	npx asciidoctor-revealjs content/*.adoc --destination-dir build $(attributes)
+	npx asciidoctor build/index.adoc
+bootstrap:
+	npm install
 clean:
-	rm *.html
-	rm -rf reveal.js
+	-rm -rf build
+
+.PHONY: all bootstrap clean
