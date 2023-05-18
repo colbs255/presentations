@@ -3,8 +3,10 @@ all: build
 bootstrap:
 	npm i --save asciidoctor @asciidoctor/reveal.js
 build:
+	mkdir build
 	node scripts/build_adoc_index.js
 	npx asciidoctor-revealjs content/*.adoc --destination-dir build $(attributes)
+	npx asciidoctor build/index.adoc
 clean:
 	-rm -rf build
 

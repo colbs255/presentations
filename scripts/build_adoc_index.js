@@ -17,6 +17,7 @@ function createAdoc(title, body) {
 
 function run() {
     var body = "";
+    console.log("Generating content index")
     fs.readdirSync(contentFolder).forEach(file => {
         const doc = asciidoctor.loadFile(contentFolder + file);
         const title = doc.getDocumentTitle();
@@ -24,10 +25,9 @@ function run() {
         const line = ("* " + link + "\n");
         body += line;
     });
-
     const docText = createAdoc("Presentations", body);
 
-    const filePath = contentFolder + "index.adoc";
+    const filePath = "./build/index.adoc";
     console.log("Writing index file to " + filePath);
     try {
         fs.writeFileSync(filePath, docText);
