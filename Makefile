@@ -1,4 +1,10 @@
-attributes := -a revealjs_theme=white -a source-highlighter=highlightjs -a table-caption! -a revealjs_margin=.05 -a revealjs_height=800 -a revealjs_width=1000
+attributes := \
+			  -a revealjs_theme=white \
+			  -a source-highlighter=highlightjs \
+			  -a table-caption! \
+			  -a revealjs_margin=.05 \
+			  -a revealjs_height=800 \
+			  -a revealjs_width=1000
 
 all: bootstrap build
 build:
