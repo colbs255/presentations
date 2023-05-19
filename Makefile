@@ -1,4 +1,5 @@
-attributes := -a revealjs_theme=white \
+attributes := \
+			  -a revealjs_theme=white \
 			  -a source-highlighter=highlightjs \
 			  -a table-caption! \
 			  -a revealjs_margin=.05 \
