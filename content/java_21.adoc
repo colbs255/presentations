@@ -7,8 +7,8 @@
 * Pattern matching for switch
 * Virtual Threads
 * Sequenced Collections
-* Emojis
-* Serialization
+* Serialization?
+* New methods: emoji
 
 == Sequenced Collections
 
@@ -96,3 +96,11 @@ TODO demo
 == Conclusion
 
 == Looking Ahead
+
+* String Templates
+* Structured Concurrency
+* Foreign function and memory API
+* Unnamed patterns and variables
+* Unnamed classes and instance main methods
+* Scoped values
+* Vector API
