@@ -1,3 +1,98 @@
 = Java 21
 
 == What's new?
+
+* Generational ZGC
+* Record Patterns
+* Pattern matching for switch
+* Virtual Threads
+* Sequenced Collections
+* Emojis
+* Serialization
+
+== Sequenced Collections
+
+=== New Interface
+
+[,java]
+----
+interface SequencedCollection<E> extends Collection<E> {
+    SequencedCollection<E> reversed();
+
+    // methods promoted from Deque
+    void addFirst(E);
+    void addLast(E);
+    E getFirst();
+    E getLast();
+    E removeFirst();
+    E removeLast();
+}
+----
+
+* Implemented by collections like:
+    ** `List`
+    ** `Deque`
+    ** `NavigableSet`
+    ** `LinkedHashSet`
+
+=== Reverse traversal
+
+.Before
+[,java]
+----
+for (int i = list.size() - 1; i >= 0; i--) {
+    var item = list.get(i);
+    // do something
+}
+----
+
+.After
+[,java]
+----
+for (var item : list.reversed()) {
+    // do something
+}
+
+list.reversed().stream()
+    .map(Object::toString)
+    .toList();
+----
+
+=== Interview Question
+
+Reverse a linked list
+
+.Solution
+[,java]
+----
+var list = new LinkedList<Integer>();
+list.reverse();
+----
+
+=== First and Last
+
+|===
+| | Before | After
+
+| Get last
+| `list.get(list.size() - 1)`
+| `list.getLast()`
+
+| Remove last
+| `list.remove(list.size() - 1)`
+| `list.removeLast()`
+
+| Add last
+| `list.add(list.size() - 1)`
+| `list.addLast()`
+|===
+
+`(get|add|remove)First()` works the same way
+
+== Virtual Threads
+
+TODO demo
+
+== Conclusion
+
+== Looking Ahead
