@@ -2,11 +2,12 @@
 
 == What's new?
 
+* Sequenced Collections
+* Code snippets in Javadocs
 * Generational ZGC
 * Record Patterns
 * Pattern matching for switch
 * Virtual Threads
-* Sequenced Collections
 * Serialization?
 * New methods: emoji
 
@@ -89,9 +90,70 @@ list.reverse();
 
 `(get|add|remove)First()` works the same way
 
+== Code Snippets in Javadocs
+
+=== Code Snippets Today
+
+[,java]
+----
+/**
+ * Streams example
+ *
+ * <pre>{@code
+ *     int sum = widgets.stream()
+ *                      .filter(w -> w.getColor() == RED)
+ *                      .mapToInt(w -> w.getWeight())
+ *                      .sum();
+ * }</pre>
+*/
+----
+
+* `<pre>` is required to preserve whitespace
+* `{@code}` properly displays characters like `@`, `<`, and `>` in the code example
+
+=== Code Snippets with Java 21
+
+[,java]
+----
+/**
+ * Streams example
+ *
+ * {@snippet :
+ *     int sum = widgets.stream()
+ *                      .filter(w -> w.getColor() == RED)
+ *                      .mapToInt(w -> w.getWeight())
+ *                      .sum();
+ * }
+*/
+----
+
+=== External Snippets
+
+[,java]
+----
+/**
+ * Streams example
+ *
+ * {@snippet class="StreamExample"}
+*/
+----
+
+=== Highlighting
+
+[source,subs="verbatim,quotes"]
+----
+class HelloWorld {
+    public static void main(String... args) {
+        System.out.*println*("Hello World!");
+    }
+}
+----
+
+See https://openjdk.org/jeps/413[JEP 413: Code Snippets in Java Documentation]
+
 == Virtual Threads
 
-TODO demo
+TODO: demo
 
 == Conclusion
 
