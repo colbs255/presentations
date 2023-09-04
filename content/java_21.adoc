@@ -160,6 +160,62 @@ See https://openjdk.org/jeps/413[JEP 413: Code Snippets in Java Documentation]
 * Garbage collectors like G1 take advantage of this by splitting the heap into a Young Generation and Old generation
 * ZGC will now be doing the same, improving performance
 
+=== Video
+
+* slight increase in memory footprint and startup
+* modest throughtput improvement (5 - 15%)
+* Serialization is faster
+* G1: region size can be increased to 512 (good for apps with large objects)
+    ** single mark bitmap (1% improvement)
+    ** concurrent refinement: improved throughput
+
+== Record Patterns
+
+[,java]
+----
+record Point(int x, int y) {}
+
+static void printSum(Object obj) {
+    if (obj instanceof Point p) {
+        int x = p.x();
+        int y = p.y();
+        System.out.println(x+y);
+    }
+}
+----
+
+[,java]
+----
+static void printSum(Object obj) {
+    if (obj instanceof Point(int x, int y)) {
+        System.out.println(x+y);
+    }
+}
+----
+
+.Nested
+[,java]
+----
+record Point(int x, int y) {}
+enum Color { RED, GREEN, BLUE }
+record ColoredPoint(Point p, Color c) {}
+record Rectangle(ColoredPoint upperLeft, ColoredPoint lowerRight) {}
+static void printUpperLeftColoredPoint(Rectangle r) {
+    if (r instanceof Rectangle(ColoredPoint ul, ColoredPoint lr)) {
+         System.out.println(ul.c());
+    }
+}
+
+static void printColorOfUpperLeftPoint(Rectangle r) {
+    if (r instanceof Rectangle(ColoredPoint(Point p, Color c),
+                               ColoredPoint lr)) {
+        System.out.println(c);
+    }
+}
+----
+
+Need to read more of the jep
+
 == Virtual Threads
 
 TODO: demo
