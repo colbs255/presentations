@@ -7,14 +7,14 @@ attributes := "\
     -a revealjs_width=1000 \
     "
 
-all: bootstrap build
 build:
+    npm install
     mkdir -p build/node_modules
     node scripts/build_adoc_index.js
     npx asciidoctor-revealjs content/*.adoc --destination-dir build {{attributes}}
     npx asciidoctor build/index.adoc
     cp -r node_modules/reveal.js/ build/node_modules/reveal.js
-bootstrap:
-    npm install
+run:
+    xdg-open build/index.html
 clean:
-    rm -rf build
+    -rm -rf build
