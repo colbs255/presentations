@@ -183,6 +183,8 @@ static void printSum(Object obj) {
 
 === Nested Record Patterns
 
+Pattern matching scales elegantly with more complicated object graphs
+
 [,java]
 ----
 record Point(int x, int y) {}
@@ -190,11 +192,9 @@ enum Color { RED, GREEN, BLUE }
 record ColoredPoint(Point p, Color c) {}
 record Rectangle(ColoredPoint upperLeft, ColoredPoint lowerRight) {}
 
-static void printUpperLeftColor(Rectangle r) {
-    if (r instanceof Rectangle(ColoredPoint(Point p, Color c),
-                               ColoredPoint lr)) {
-        System.out.println(c);
-    }
+// print upper left color
+if (r instanceof Rectangle(ColoredPoint(Point p, Color c), var lr)) {
+    System.out.println(c);
 }
 ----
 
@@ -363,11 +363,33 @@ switch (r) {
 }
 ----
 
-To ensure backward compatibility, all existing switch statements will compile unchanged. But if a switch statement uses any of the switch enhancements described in this JEP then the compiler will check that it is exhaustive. (Future compilers of the Java language may emit warnings for legacy switch statements that are not exhaustive.)
+=== Backwards compatibility
 
-IF YOU DO A NULL CHECK, you get exhaustiveness!!!
+[quote, JEP 441: Pattern Matching for switch]
+All existing switch statements will compile unchanged. But if a switch statement uses any of the switch enhancements described in this JEP then the compiler will check that it is exhaustive.
 More precisely, exhaustiveness is required of any switch statement that uses pattern or null labels or whose selector expression is not one of the legacy types
 
+=== Trick for exhaustive switch statements
+
+[,java]
+----
+sealed interface S permits A, B, C {}
+final class A implements S {}
+final class B implements S {}
+record C(int i) implements S {}
+
+static void testExhaustiveStatement(S s) {
+    // COMPILE ERROR
+    // switch' statement does not cover all possible input values
+    switch (s) {
+        // Null check is a feature of the new switch type
+        case null -> throw new NullPointerException(...);
+        case A a -> System.out.println("I am type a");
+        case B b -> System.out.println("I am type b");
+        // missing C case
+    };
+}
+----
 
 == Virtual Threads
 
