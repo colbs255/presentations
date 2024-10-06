@@ -313,7 +313,7 @@ static int testSealedExhaustive(S s) {
 }
 ----
 
-* an alternative to the visitor pattern
+* An alternative to the visitor pattern
 
 === Optional
 
@@ -403,30 +403,33 @@ static void testExhaustiveStatement(S s) {
 
 [,java]
 ----
-try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-    IntStream.range(0, 100_000).forEach(i -> {
+int threadCount = 100_000;
+try (var executor = Executors.newFixedThreadPool(threadCount)) {
+    IntStream.range(0, threadCount).forEach(i -> {
         executor.submit(() -> {
             Thread.sleep(Duration.ofSeconds(1));
             return i;
         });
     });
-}  // executor.close() is called implicitly, and waits
+} // executor.close() is called implicitly, and waits
 ----
 
 * Threads today are wrappers around costly OS threads 
+* Creating them requires nontrivial amount of time and memory
 
 === Power of Virtual Threads
 
 [,java]
 ----
+int threadCount = 100_000;
 try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-    IntStream.range(0, 100_000).forEach(i -> {
+    IntStream.range(0, threadCount).forEach(i -> {
         executor.submit(() -> {
             Thread.sleep(Duration.ofSeconds(1));
             return i;
         });
     });
-}  // executor.close() is called implicitly, and waits
+} // executor.close() is called implicitly, and waits
 ----
 
 * Virtual threads are lightweight threads like goroutines or erlang processes
@@ -435,8 +438,8 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
 === When to use virtual threads
 
-* high number of concurrent tasks
-* workload is not cpu bound - virtual threads are not faster threads
+* High number of concurrent tasks
+* Workload is not cpu bound - virtual threads are not faster threads
 
 === More info on virtual threads
 
