@@ -9,7 +9,6 @@
 * Record Patterns
 * Improved switches
 * Virtual Threads
-* Improved emoji support
 
 == Sequenced Collections
 
@@ -195,10 +194,10 @@ static void printSum(Object obj) {
 record Point(int x, int y) {}
 enum Color { RED, GREEN, BLUE }
 record ColoredPoint(Point p, Color c) {}
-record Rectangle(ColoredPoint upperLeft, ColoredPoint lowerRight) {}
+record Rect(ColoredPoint upperLeft, ColoredPoint lowerRight) {}
 
 // print upper left color
-if (r instanceof Rectangle(ColoredPoint(Point p, Color c), var lr)) {
+if (r instanceof Rect(ColoredPoint(Point p, Color c), var lr)) {
     System.out.println(c);
 }
 ----
@@ -227,7 +226,7 @@ static String formatter(Object obj) {
 .After
 [,java]
 ----
-static String formatterPatternSwitch(Object obj) {
+static String formatter(Object obj) {
     return switch (obj) {
         case Integer i -> String.format("int %d", i);
         case Long l    -> String.format("long %d", l);
@@ -319,15 +318,15 @@ static int testSealedExhaustive(S s) {
 
 [,java]
 ----
-sealed interface Opt<T> { 
-    record Some<T>(T value) implements Opt<T> { }
-    record None<T>() implements Opt<T> { }
-}
-
-static<T, U> Opt<U> map(Opt<T> opt, Function<T, U> mapper) { 
-    return switch (opt) { 
-        case Some<T>(var v) -> new Some<>(mapper.apply(v));
-        case None<T>() -> new None<>();
+sealed interface Opt<T> {
+    record Some<T>(T value) implements Opt<T> {}
+    record None<T>() implements Opt<T> {}
+    
+    default <OUT> Opt<OUT> map(Function<T, OUT> mapper) {
+        return switch (this) {
+            case Some<T>(var v) -> new Some<>(mapper.apply(v));
+            case None<T>() -> new None<>();
+        };
     }
 }
 ----
@@ -363,10 +362,10 @@ sealed interface AsyncReturn<V> {
 
 AsyncResult<V> r = future.get();
 switch (r) {
-    case Success<V>(var result): ...
-    case Failure<V>(Throwable cause): ...
-    case Timeout<V>(): ...
-    case Interrupted<V>(): ...
+    case Success<V>(var result) -> ...
+    case Failure<V>(Throwable cause) -> ...
+    case Timeout<V>() -> ...
+    case Interrupted<V>() -> ...
 }
 ----
 
