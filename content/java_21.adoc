@@ -7,7 +7,7 @@
 * Code snippets in Javadocs
 * Generational ZGC
 * Record Patterns
-* Pattern matching for switches
+* Improved switches
 * Virtual Threads
 * Improved emoji support
 
@@ -203,7 +203,7 @@ if (r instanceof Rectangle(ColoredPoint(Point p, Color c), var lr)) {
 }
 ----
 
-== Improved Switch
+== Improved Switches
 
 === Basic Pattern Matching
 
@@ -312,6 +312,8 @@ static int testSealedExhaustive(S s) {
     };
 }
 ----
+
+* an alternative to the visitor pattern
 
 === Optional
 
@@ -451,15 +453,15 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
 == Emojis
 
-=== Emoji Example
+=== isEmoji method
 
 [,java]
 ----
-String messageWithEmoji = "Hello! 😄";
-String messageWithoutEmoji = "Hello!";
+String emoji = "Hello! 😄";
+String noEmoji = "Hello!";
 
-assertTrue(messageWithEmoji.codePoints().anyMatch(Character::isEmoji));
-assertFalse(messageWithoutEmoji.codePoints().anyMatch(Character::isEmoji));
+emoji.codePoints().anyMatch(Character::isEmoji); // true
+noEmoji.codePoints().anyMatch(Character::isEmoji); // false
 ----
 
 == What's next for Java?
