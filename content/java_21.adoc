@@ -1,0 +1,491 @@
+= Java 21
+:figure-caption!:
+
+== What's new?
+
+* Sequenced Collections
+* Code snippets in Javadocs
+* Generational ZGC
+* Record Patterns
+* Improved switches
+* Virtual Threads
+
+== Sequenced Collections
+
+=== New Interface
+
+[,java]
+----
+interface SequencedCollection<E> extends Collection<E> {
+    SequencedCollection<E> reversed();
+
+    // methods promoted from Deque
+    void addFirst(E);
+    void addLast(E);
+    E getFirst();
+    E getLast();
+    E removeFirst();
+    E removeLast();
+}
+----
+
+* Implemented by collections like:
+    ** `List`
+    ** `Deque`
+    ** `NavigableSet`
+    ** `LinkedHashSet`
+
+=== First and Last
+
+|===
+| | Before | After
+
+| Get last
+| `c.get(c.size()-1)`
+| `c.getLast()`
+
+| Remove last
+| `c.remove(c.size()-1)`
+| `c.removeLast()`
+
+| Add last
+| `c.add(c.size()-1)`
+| `c.addLast()`
+|===
+
+`(get|add|remove)First()` works the same way
+
+=== Reverse traversal
+
+.Before
+[,java]
+----
+for (int i = list.size() - 1; i >= 0; i--) {
+    var item = list.get(i);
+    // do something
+}
+----
+
+.After
+[,java]
+----
+for (var item : list.reversed()) {
+    // do something
+}
+
+list.reversed().stream()
+    .map(Object::toString)
+    .toList();
+----
+
+=== Interview Question
+
+.Reverse a linked list
+[,java]
+----
+var list = new LinkedList<Integer>();
+list.reverse();
+----
+
+== Code Snippets in Javadocs
+
+=== Code Snippets Today
+
+[,java]
+----
+/**
+ * Streams example
+ *
+ * <pre>{@code
+ *     int sum = widgets.stream()
+ *                      .filter(w -> w.getColor() == RED)
+ *                      .mapToInt(w -> w.getWeight())
+ *                      .sum();
+ * }</pre>
+*/
+----
+
+* `<pre>` is required to preserve whitespace
+* `{@code}` properly displays characters like `@`, `<`, and `>` in the code example
+
+=== Code Snippets with Java 21
+
+[,java]
+----
+/**
+ * Streams example
+ *
+ * {@snippet :
+ *     int sum = widgets.stream()
+ *                      .filter(w -> w.getColor() == RED)
+ *                      .mapToInt(w -> w.getWeight())
+ *                      .sum();
+ * }
+*/
+----
+
+=== Other snippet improvements
+
+* External snippets (link to a separate file that contains the snippet)
+* Support for snippet validation from external tools
+* Highlighting in snippets
+
+[source,subs="verbatim,quotes"]
+----
+class HelloWorld {
+    public static void main(String... args) {
+        System.out.*println*("Hello World!");
+    }
+}
+----
+
+See https://openjdk.org/jeps/413[JEP 413: Code Snippets in Java Documentation]
+
+== Generational Z Garbage Collector (ZGC)
+
+=== Generational Hypothesis
+
+* "Most objects survive for a short period of time"
+* In other words, an object that was just created is more likely to die (and be collected) than an object that has been around for a while
+* Garbage collectors take advantage of this by splitting the heap into a Young Generation and an Old generation
+
+=== Netflix Improvements
+
+.Cancellation/errors rates per second. Previous week in white vs current cancellation rate in purple, as ZGC was enabled on a service cluster on November 16
+image::https://miro.medium.com/v2/resize:fit:4800/format:webp/0*SCVt4VGlA517hZDi[]
+
+=== Cassandra Improvements
+
+[quote, JEP 439: Generational ZGC]
+When running an Apache Cassandra benchmark Generational ZGC requires a quarter of the heap size yet achieves four times the throughput compared to non-generational ZGC, while still keeping pause times under one millisecond
+
+== Record Patterns
+
+=== Cleaner Code
+
+[,java]
+----
+record Point(int x, int y) {}
+
+static void printSum(Object obj) {
+    if (obj instanceof Point p) {
+        int x = p.x();
+        int y = p.y();
+        System.out.println(x+y);
+    }
+}
+----
+
+[,java]
+----
+static void printSum(Object obj) {
+    if (obj instanceof Point(int x, int y)) {
+        System.out.println(x+y);
+    }
+}
+----
+
+=== Nested Record Patterns
+
+* Pattern matching scales elegantly with more complicated object graphs
+
+[,java]
+----
+record Point(int x, int y) {}
+enum Color { RED, GREEN, BLUE }
+record ColoredPoint(Point p, Color c) {}
+record Rect(ColoredPoint upperLeft, ColoredPoint lowerRight) {}
+
+// print upper left color
+if (r instanceof Rect(ColoredPoint(Point p, Color c), var lr)) {
+    System.out.println(c);
+}
+----
+
+== Improved Switches
+
+=== Basic Pattern Matching
+
+.Before
+[,java]
+----
+static String formatter(Object obj) {
+    if (obj instanceof Integer i) {
+        return String.format("int %d", i);
+    } else if (obj instanceof Long l) {
+        return String.format("long %d", l);
+    } else if (obj instanceof Double d) {
+        return String.format("double %f", d);
+    } else if (obj instanceof String s) {
+        return String.format("String %s", s);
+    }
+    return obj.toString();
+}
+----
+
+.After
+[,java]
+----
+static String formatter(Object obj) {
+    return switch (obj) {
+        case Integer i -> String.format("int %d", i);
+        case Long l    -> String.format("long %d", l);
+        case Double d  -> String.format("double %f", d);
+        case String s  -> String.format("String %s", s);
+        default        -> obj.toString();
+    };
+}
+----
+
+=== Null Checks
+
+.Before
+[,java]
+----
+static void testFooBarOld(String s) {
+    if (s == null) {
+        System.out.println("Oops!");
+        return;
+    }
+    switch (s) {
+        case "Foo", "Bar" -> System.out.println("Great");
+        default           -> System.out.println("Ok");
+    }
+}
+----
+
+.After
+[,java]
+----
+static void testFooBarNew(String s) {
+    switch (s) {
+        case null         -> System.out.println("Oops");
+        case "Foo", "Bar" -> System.out.println("Great");
+        default           -> System.out.println("Ok");
+    }
+}
+----
+
+=== Case Guards
+
+.Before
+[,java]
+----
+static void testOld(Object obj) {
+    switch (obj) {
+        case String s:
+            if (s.length() == 1) { ... }
+            else { ... }
+            break;
+        ...
+    }
+}
+----
+
+.After
+[,java]
+----
+static void testNew(Object obj) {
+    switch (obj) {
+        case String s when s.length() == 1 -> ...
+        case String s                      -> ...
+        ...
+    }
+}
+----
+
+=== Exhaustive switches on sealed classes
+
+[,java]
+----
+sealed interface S permits A, B, C {}
+final class A implements S {}
+final class B implements S {}
+record C(int i) implements S {}
+
+static int testSealedExhaustive(S s) {
+    return switch (s) {
+        case A a -> 1;
+        case B b -> 2;
+        case C c -> 3;
+    };
+}
+----
+
+* An alternative to the visitor pattern
+
+=== Optional
+
+[,java]
+----
+sealed interface Opt<T> {
+    record Some<T>(T value) implements Opt<T> {}
+    record None<T>() implements Opt<T> {}
+    
+    default <OUT> Opt<OUT> map(Function<T, OUT> mapper) {
+        return switch (this) {
+            case Some<T>(var v) -> new Some<>(mapper.apply(v));
+            case None<T>() -> new None<>();
+        };
+    }
+}
+----
+
+=== Binary Tree
+
+[,java]
+----
+sealed interface Tree<T> { 
+    record Nil<T>() implements Tree<T> { }
+    record Node<T>(Tree<T> left, T val, Tree<T> right) implements Tree<T> { }
+}
+
+static<T> boolean contains(Tree<T> tree, T target) { 
+    return switch (tree) { 
+        case Nil() -> false;
+        case Node(var left, var val, var right) -> 
+            target.equals(val) || left.contains(target) || right.contains(target);
+    };
+}
+----
+
+=== Result Type
+
+[,java]
+----
+sealed interface AsyncReturn<V> {
+    record Success<V>(V result) implements AsyncReturn<V> { }
+    record Failure<V>(Throwable cause) implements AsyncReturn<V> { }
+    record Timeout<V>() implements AsyncReturn<V> { }
+    record Interrupted<V>() implements AsyncReturn<V> { }
+}
+
+AsyncResult<V> r = future.get();
+switch (r) {
+    case Success<V>(var result) -> ...
+    case Failure<V>(Throwable cause) -> ...
+    case Timeout<V>() -> ...
+    case Interrupted<V>() -> ...
+}
+----
+
+=== Backwards compatibility
+
+[quote, JEP 441: Pattern Matching for switch]
+All existing switch statements will compile unchanged. But if a switch statement uses any of the switch enhancements described in this JEP then the compiler will check that it is exhaustive.
+More precisely, exhaustiveness is required of any switch statement that uses pattern or null labels or whose selector expression is not one of the legacy types
+
+=== Trick for exhaustive switch statements
+
+[,java]
+----
+sealed interface S permits A, B, C {}
+final class A implements S {}
+final class B implements S {}
+record C(int i) implements S {}
+
+static void testExhaustiveStatement(S s) {
+    // COMPILE ERROR
+    // switch' statement does not cover all possible input values
+    switch (s) {
+        case null -> throw new NullPointerException(...);
+        case A a -> System.out.println("I am type a");
+        case B b -> System.out.println("I am type b");
+        // missing C case
+    };
+}
+----
+
+== Virtual Threads
+
+=== Platform threads
+
+[,java]
+----
+int threadCount = 100_000;
+try (var executor = Executors.newFixedThreadPool(threadCount)) {
+    IntStream.range(0, threadCount).forEach(i -> {
+        executor.submit(() -> {
+            Thread.sleep(Duration.ofSeconds(1));
+            return i;
+        });
+    });
+} // executor.close() is called implicitly, and waits
+----
+
+* Threads today are wrappers around costly OS threads 
+* Creating them requires nontrivial amount of time and memory
+
+=== Power of Virtual Threads
+
+[,java]
+----
+int threadCount = 100_000;
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    IntStream.range(0, threadCount).forEach(i -> {
+        executor.submit(() -> {
+            Thread.sleep(Duration.ofSeconds(1));
+            return i;
+        });
+    });
+} // executor.close() is called implicitly, and waits
+----
+
+* Lightweight threads like goroutines or erlang processes
+* Efficient, thread-per-request style computing
+* Very cheap to create - *do not pool them*
+* Mounted on platform threads and unmounted on blocking operations
+
+=== Virtual Thread API
+
+[,java]
+----
+Thread virtualThread1 = Thread.startVirtualThread(() -> {
+    System.out.println("Executing virtual thread");
+});
+
+Thread virtualThread2 = Thread.ofVirtual()
+    .name("virtual-thread-2")
+    .start(() -> {
+        System.out.println("Executing virtual thread");
+    });
+
+virtualThread1.join();
+virtualThread2.join();
+----
+
+=== When to use virtual threads
+
+* High number of concurrent tasks
+* Workload is not cpu bound - virtual threads are not faster threads
+
+=== Virtual Thread Pinning
+
+* There are two scenarios in which a virtual thread cannot be unmounted during blocking operations because it is pinned to its carrier:
+    ** When it executes code inside a synchronized block or method
+    ** When it executes a native method or a foreign function
+
+* This affects scalability, but not correctness
+
+== Emojis
+
+=== isEmoji method
+
+[,java]
+----
+String emoji = "Hello! 😄";
+String noEmoji = "Hello!";
+
+emoji.codePoints().anyMatch(Character::isEmoji); // true
+noEmoji.codePoints().anyMatch(Character::isEmoji); // false
+----
+
+== What's next for Java?
+
+* String Templates (removed from JDK 23)
+* Structured Concurrency
+* Foreign function and memory API
+* Unnamed patterns and variables
+* Unnamed classes and instance main methods
+* Scoped values
+* Vector API
