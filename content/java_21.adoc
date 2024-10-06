@@ -432,27 +432,41 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 } // executor.close() is called implicitly, and waits
 ----
 
-* Virtual threads are lightweight threads like goroutines or erlang processes
+* Lightweight threads like goroutines or erlang processes
 * Efficient, thread-per-request style computing
-* Very cheap to create - no need to pool them
+* Very cheap to create - *do not pool them*
+* Mounted on platform threads and unmounted on blocking operations
+
+=== Virtual Thread API
+
+[,java]
+----
+Thread virtualThread1 = Thread.startVirtualThread(() -> {
+    System.out.println("Executing virtual thread");
+});
+
+Thread virtualThread2 = Thread.ofVirtual()
+    .name("virtual-thread-2")
+    .start(() -> {
+        System.out.println("Executing virtual thread");
+    });
+
+virtualThread1.join();
+virtualThread2.join();
+----
 
 === When to use virtual threads
 
 * High number of concurrent tasks
 * Workload is not cpu bound - virtual threads are not faster threads
 
-=== More info on virtual threads
+=== Virtual Thread Pinning
 
-* cap your program with semaphors not thread pools
-* java debuggers can step through virtual threads just like normal threads
-* The JDK's virtual thread scheduler is a work-stealing ForkJoinPool that operates in FIFO mode
-* the JDK's virtual thread scheduler assigns the virtual thread for execution on a platform thread by mounting the virtual thread on a platform thread.
-* virtual threads (and their stacks) are stored on the heap
-* Typically, a virtual thread will unmount when it blocks on I/O or some other blocking operation in the JDK, such as BlockingQueue.take()
 * There are two scenarios in which a virtual thread cannot be unmounted during blocking operations because it is pinned to its carrier:
-    When it executes code inside a synchronized block or method, or
-    When it executes a native method or a foreign function
-* API is very similar to platform threads
+    ** When it executes code inside a synchronized block or method
+    ** When it executes a native method or a foreign function
+
+* This affects scalability, but not correctness
 
 == Emojis
 
