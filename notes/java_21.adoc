@@ -1,0 +1,38 @@
+= Java 21
+
+== Intro
+
+- overview
+- trying to give you an overview of everything, moving fast
+
+== Sequenced
+
+- new interface
+- none of you will leave citadel, but if you happen to find yourself doing another interview, and they ask you to reverse a linked list
+
+== Code snippets
+
+- good developers and you always document your code, so i know you will be excited for this one
+- today... gotta do the pre and the code tags
+- that's why i left these bullet points here
+- when designing an API, examples are one of the best things you can do
+- cover fast
+
+== ZGC
+
+- low latency garbage collector with sub ms pause times on TB size heaps
+- collect more frequently
+- not going to go into how generational garbage collectors work
+- when to use and when profile
+
+== Record patterns
+
+- where we get into more functional programming stuff
+- not a game changer
+- contrived example
+
+== Switch
+
+- exhaustive: add or remove
+- Method is taking in a generic type and then doing things based on the specific type
+- nice side effect

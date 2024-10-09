@@ -145,8 +145,7 @@ See https://openjdk.org/jeps/413[JEP 413: Code Snippets in Java Documentation]
 
 === Generational Hypothesis
 
-* "Most objects survive for a short period of time"
-* In other words, an object that was just created is more likely to die (and be collected) than an object that has been around for a while
+* An object that was just created is more likely to die (and be collected) than an object that has been around for a while
 * Garbage collectors take advantage of this by splitting the heap into a Young Generation and an Old generation
 
 === Netflix Improvements
@@ -202,40 +201,42 @@ if (r instanceof Rect(ColoredPoint(Point p, Color c), var lr)) {
 }
 ----
 
-== Improved Switches
-
-=== Basic Pattern Matching
+=== Declare what you want
 
 .Before
 [,java]
 ----
-static String formatter(Object obj) {
-    if (obj instanceof Integer i) {
-        return String.format("int %d", i);
-    } else if (obj instanceof Long l) {
-        return String.format("long %d", l);
-    } else if (obj instanceof Double d) {
-        return String.format("double %f", d);
-    } else if (obj instanceof String s) {
-        return String.format("String %s", s);
+record Pair<U,V>(U u, V v) {}
+static Optional<Integer> sum_PatternMatching(Object obj) {
+    if (obj instanceof Pair(Integer u, Integer v)) {
+        return Optional.of(u + v);
     }
-    return obj.toString();
+    return Optional.empty();
 }
 ----
 
 .After
 [,java]
 ----
-static String formatter(Object obj) {
-    return switch (obj) {
-        case Integer i -> String.format("int %d", i);
-        case Long l    -> String.format("long %d", l);
-        case Double d  -> String.format("double %f", d);
-        case String s  -> String.format("String %s", s);
-        default        -> obj.toString();
-    };
+static Optional<Integer> sum_noPatternMatching(Object obj) {
+    if (!(obj instanceof Pair)) {
+        return Optional.empty();
+    }
+    Pair<?,?> pair = (Pair<?, ?>) obj;
+    if (!(pair.u() instanceof Integer)) {
+        return Optional.empty();
+    }
+    var u = (Integer) pair.u();
+    if (!(pair.v() instanceof Integer)) {
+        return Optional.empty();
+    }
+    var v = (Integer) pair.v();
+
+    return Optional.of(u + v);
 }
 ----
+
+== Improved Switches
 
 === Null Checks
 
@@ -294,6 +295,39 @@ static void testNew(Object obj) {
 }
 ----
 
+=== Basic Pattern Matching
+
+.Before
+[,java]
+----
+static String formatter(Object obj) {
+    if (obj instanceof Integer i) {
+        return String.format("int %d", i);
+    } else if (obj instanceof Long l) {
+        return String.format("long %d", l);
+    } else if (obj instanceof Double d) {
+        return String.format("double %f", d);
+    } else if (obj instanceof String s) {
+        return String.format("String %s", s);
+    }
+    return obj.toString();
+}
+----
+
+.After
+[,java]
+----
+static String formatter(Object obj) {
+    return switch (obj) {
+        case Integer i -> String.format("int %d", i);
+        case Long l    -> String.format("long %d", l);
+        case Double d  -> String.format("double %f", d);
+        case String s  -> String.format("String %s", s);
+        default        -> obj.toString();
+    };
+}
+----
+
 === Exhaustive switches on sealed classes
 
 [,java]
@@ -311,8 +345,6 @@ static int testSealedExhaustive(S s) {
     };
 }
 ----
-
-* An alternative to the visitor pattern
 
 === Optional
 
