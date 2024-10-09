@@ -341,13 +341,6 @@ static int testSealedExhaustive(S s) {
 sealed interface Opt<T> {
     record Some<T>(T value) implements Opt<T> {}
     record None<T>() implements Opt<T> {}
-    
-    default <OUT> Opt<OUT> map(Function<T, OUT> mapper) {
-        return switch (this) {
-            case Some<T>(var v) -> new Some<>(mapper.apply(v));
-            case None<T>() -> new None<>();
-        };
-    }
 }
 ----
 
@@ -382,10 +375,10 @@ sealed interface AsyncReturn<V> {
 
 AsyncResult<V> r = future.get();
 switch (r) {
-    case Success<V>(var result) -> ...
-    case Failure<V>(Throwable cause) -> ...
-    case Timeout<V>() -> ...
-    case Interrupted<V>() -> ...
+    case Success(var result) -> ...
+    case Failure(Throwable cause) -> ...
+    case Timeout() -> ...
+    case Interrupted() -> ...
 }
 ----
 
