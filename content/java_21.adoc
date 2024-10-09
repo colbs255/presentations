@@ -84,7 +84,7 @@ list.reversed().stream()
 [,java]
 ----
 var list = new LinkedList<Integer>();
-list.reverse();
+list = list.reversed();
 ----
 
 == Code Snippets in Javadocs
@@ -316,7 +316,7 @@ static String formatter(Object obj) {
 }
 ----
 
-=== Exhaustive switches on sealed classes
+=== Exhaustive switches on sealed types
 
 [,java]
 ----
@@ -392,20 +392,16 @@ More precisely, exhaustiveness is required of any switch statement that uses pat
 
 [,java]
 ----
-sealed interface S permits A, B, C {}
-final class A implements S {}
-final class B implements S {}
-record C(int i) implements S {}
-
-static void testExhaustiveStatement(S s) {
-    // COMPILE ERROR
-    // switch' statement does not cover all possible input values
-    switch (s) {
-        case null -> throw new NullPointerException(...);
-        case A a -> System.out.println("I am type a");
-        case B b -> System.out.println("I am type b");
-        // missing C case
-    };
+enum Color { RED, GREEN, BLUE }
+static void testExhaustiveSwitchStatement(Color c) {
+    // compiler performs exhaustive checking
+    // since we have a null case
+    switch (c) {
+        case null -> System.out.println("null");
+        case RED -> System.out.println("I am red");
+        case GREEN -> System.out.println("I am green");
+        // missing BLUE case, compiler will error
+    }
 }
 ----
 
@@ -475,10 +471,11 @@ virtualThread2.join();
 === Virtual Thread Pinning
 
 * There are two scenarios in which a virtual thread cannot be unmounted during blocking operations because it is pinned to its carrier:
-    ** When it executes code inside a synchronized block or method
+    ** When it executes code inside a synchronized block or method (will be fixed in a future JDK)
+        *** Use `ReentrantLock` instead
     ** When it executes a native method or a foreign function
 
-* This affects scalability, but not correctness
+* This affects scalability not correctness
 
 == Emojis
 
