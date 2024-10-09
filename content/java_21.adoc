@@ -145,19 +145,13 @@ See https://openjdk.org/jeps/413[JEP 413: Code Snippets in Java Documentation]
 
 === Generational Hypothesis
 
-* "Most objects survive for a short period of time"
-* In other words, an object that was just created is more likely to die (and be collected) than an object that has been around for a while
+* An object that was just created is more likely to die (and be collected) than an object that has been around for a while
 * Garbage collectors take advantage of this by splitting the heap into a Young Generation and an Old generation
 
 === Netflix Improvements
 
-.Cancellation/errors rates per second. Previous week in white vs current cancellation rate in purple, as ZGC was enabled on a service cluster on November 16
+.Cancellation/error rates per second. Previous week in white vs current cancellation rate in purple, as ZGC was enabled on a service cluster on November 16
 image::https://miro.medium.com/v2/resize:fit:4800/format:webp/0*SCVt4VGlA517hZDi[]
-
-=== Cassandra Improvements
-
-[quote, JEP 439: Generational ZGC]
-When running an Apache Cassandra benchmark Generational ZGC requires a quarter of the heap size yet achieves four times the throughput compared to non-generational ZGC, while still keeping pause times under one millisecond
 
 == Record Patterns
 
@@ -202,40 +196,42 @@ if (r instanceof Rect(ColoredPoint(Point p, Color c), var lr)) {
 }
 ----
 
-== Improved Switches
-
-=== Basic Pattern Matching
+=== Declare what you want
 
 .Before
 [,java]
 ----
-static String formatter(Object obj) {
-    if (obj instanceof Integer i) {
-        return String.format("int %d", i);
-    } else if (obj instanceof Long l) {
-        return String.format("long %d", l);
-    } else if (obj instanceof Double d) {
-        return String.format("double %f", d);
-    } else if (obj instanceof String s) {
-        return String.format("String %s", s);
+record Pair<U,V>(U u, V v) {}
+static Optional<Integer> sum_noPatternMatching(Object obj) {
+    if (!(obj instanceof Pair)) {
+        return Optional.empty();
     }
-    return obj.toString();
+    Pair<?,?> pair = (Pair<?, ?>) obj;
+    if (!(pair.u() instanceof Integer)) {
+        return Optional.empty();
+    }
+    var u = (Integer) pair.u();
+    if (!(pair.v() instanceof Integer)) {
+        return Optional.empty();
+    }
+    var v = (Integer) pair.v();
+
+    return Optional.of(u + v);
 }
 ----
 
 .After
 [,java]
 ----
-static String formatter(Object obj) {
-    return switch (obj) {
-        case Integer i -> String.format("int %d", i);
-        case Long l    -> String.format("long %d", l);
-        case Double d  -> String.format("double %f", d);
-        case String s  -> String.format("String %s", s);
-        default        -> obj.toString();
-    };
+static Optional<Integer> sum_PatternMatching(Object obj) {
+    if (obj instanceof Pair(Integer u, Integer v)) {
+        return Optional.of(u + v);
+    }
+    return Optional.empty();
 }
 ----
+
+== Improved Switches
 
 === Null Checks
 
@@ -294,6 +290,39 @@ static void testNew(Object obj) {
 }
 ----
 
+=== Basic Pattern Matching
+
+.Before
+[,java]
+----
+static String formatter(Object obj) {
+    if (obj instanceof Integer i) {
+        return String.format("int %d", i);
+    } else if (obj instanceof Long l) {
+        return String.format("long %d", l);
+    } else if (obj instanceof Double d) {
+        return String.format("double %f", d);
+    } else if (obj instanceof String s) {
+        return String.format("String %s", s);
+    }
+    return obj.toString();
+}
+----
+
+.After
+[,java]
+----
+static String formatter(Object obj) {
+    return switch (obj) {
+        case Integer i -> String.format("int %d", i);
+        case Long l    -> String.format("long %d", l);
+        case Double d  -> String.format("double %f", d);
+        case String s  -> String.format("String %s", s);
+        default        -> obj.toString();
+    };
+}
+----
+
 === Exhaustive switches on sealed classes
 
 [,java]
@@ -311,8 +340,6 @@ static int testSealedExhaustive(S s) {
     };
 }
 ----
-
-* An alternative to the visitor pattern
 
 === Optional
 
@@ -402,7 +429,7 @@ static void testExhaustiveStatement(S s) {
 
 [,java]
 ----
-int threadCount = 100_000;
+int threadCount = 1_000_000;
 try (var executor = Executors.newFixedThreadPool(threadCount)) {
     IntStream.range(0, threadCount).forEach(i -> {
         executor.submit(() -> {
@@ -420,7 +447,7 @@ try (var executor = Executors.newFixedThreadPool(threadCount)) {
 
 [,java]
 ----
-int threadCount = 100_000;
+int threadCount = 1_000_000;
 try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
     IntStream.range(0, threadCount).forEach(i -> {
         executor.submit(() -> {
@@ -456,8 +483,8 @@ virtualThread2.join();
 
 === When to use virtual threads
 
-* High number of concurrent tasks
-* Workload is not cpu bound - virtual threads are not faster threads
+* When workload is not cpu bound - virtual threads are not faster threads
+* When there's a high number of concurrent tasks
 
 === Virtual Thread Pinning
 
