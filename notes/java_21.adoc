@@ -28,7 +28,6 @@
 == Record patterns
 
 - where we get into more functional programming stuff
-- not a game changer
 - contrived example
 
 == Switch
