@@ -216,6 +216,7 @@ static Optional<Integer> sum_noPatternMatching(Object obj) {
 .After
 [,java]
 ----
+record Pair<U,V>(U u, V v) {}
 static Optional<Integer> sum_PatternMatching(Object obj) {
     if (obj instanceof Pair(Integer u, Integer v)) {
         return Optional.of(u + v);
