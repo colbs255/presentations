@@ -420,7 +420,7 @@ try (var executor = Executors.newFixedThreadPool(threadCount)) {
             return i;
         });
     });
-} // executor.close() is called implicitly, and waits
+} // executor.close() waits for all submitted tasks to complete
 ----
 
 * Threads today are wrappers around costly OS threads 
@@ -438,7 +438,7 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
             return i;
         });
     });
-} // executor.close() is called implicitly, and waits
+} // executor.close() waits for all submitted tasks to complete
 ----
 
 * Lightweight threads like goroutines or erlang processes
@@ -476,7 +476,7 @@ virtualThread2.join();
         *** Use `ReentrantLock` instead
     ** When it executes a native method or a foreign function
 
-* This affects scalability not correctness
+* Pinning affects scalability not correctness
 
 == Emojis
 
