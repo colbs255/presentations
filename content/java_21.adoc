@@ -441,7 +441,7 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 } // executor.close() waits for all submitted tasks to complete
 ----
 
-* Lightweight threads like goroutines or erlang processes
+* Lightweight threads like goroutines and erlang processes
 * Efficient, thread-per-request style computing
 * Very cheap to create - *do not pool them*
 * Mounted on platform threads and unmounted on blocking operations

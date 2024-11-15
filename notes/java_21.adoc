@@ -35,3 +35,10 @@
 - exhaustive: add or remove
 - Method is taking in a generic type and then doing things based on the specific type
 - nice side effect
+
+== Virtual Threads
+
+- demonstrate ~10k platform threads: show slowness
+- demonstrate ~20k: show OOM
+- switch to virtual threads
+- do 1 Million threads
