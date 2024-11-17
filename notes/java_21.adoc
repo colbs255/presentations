@@ -42,3 +42,11 @@
 - demonstrate ~20k: show OOM
 - switch to virtual threads
 - do 1 Million threads
+- virtual memory maps large virtual address space to a limited amount of physical RAM, virtual threads map to a small number of OS threads.
+- Green threads share a single operating system thread through co-operative concurrency. The main benefit of coroutines and green threads is ease of implementation
+- When code running in a virtual thread calls a blocking I/O operation in the java.* API, the runtime performs a non-blocking OS call and automatically suspends the virtual thread until it can be resumed later
+- The JDK's virtual thread scheduler is a work-stealing ForkJoinPool that operates in FIFO mode
+- The parallelism of the scheduler is the number of platform threads available for the purpose of scheduling virtual threads. By default it is equal to the number of available processors, but it can be tuned with the system property jdk.virtualThreadScheduler.parallelism
+- ForkJoinPool is distinct from the common pool which is used, for example, in the implementation of parallel streams, and which operates in LIFO mode.
+- Virtual threads do not require or expect application code to explicitly hand control back to the scheduler; in other words, virtual threads are not cooperative
+- The scheduler does not currently implement time sharing for virtual threads. Time sharing is the forceful preemption of a thread that has consumed an allotted quantity of CPU time. While time sharing can be effective at reducing the latency of some tasks when there are a relatively small number of platform threads and CPU utilization is at 100%, it is not clear that time sharing would be as effective with a million virtual threads
