@@ -472,11 +472,11 @@ virtualThread2.join();
 
 === Virtual Thread Pinning
 
-* There are two scenarios in which a virtual thread cannot be unmounted during blocking operations because it is pinned to its carrier:
-    ** When it executes code inside a synchronized block or method (fix targeted for JDK 24)
-        *** Use `ReentrantLock` instead
-    ** When it executes a native method or a foreign function
+* A virtual thread cannot be unmounted during blocking operations because it is pinned to its carrier when:
+    ** executing a synchronized block or method
+    ** executing a native method or foreign function
 
+* Synchronized block pinning is targeted to be fixed in JDK 24
 * Pinning affects scalability not correctness
 
 == Emojis
