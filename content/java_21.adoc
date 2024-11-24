@@ -94,15 +94,14 @@ list = list.reversed();
 [,java]
 ----
 /**
- * Streams example
- *
+ * Stream example
  * <pre>{@code
- *     int sum = widgets.stream()
- *                      .filter(w -> w.getColor() == RED)
- *                      .mapToInt(w -> w.getWeight())
- *                      .sum();
+ * widgets.stream()
+ *         .filter(w -> w.color() == Color.RED)
+ *         .mapToInt(Widget::weight)
+ *         .sum();
  * }</pre>
-*/
+ */
 ----
 
 * `<pre>` is required to preserve whitespace
@@ -113,20 +112,42 @@ list = list.reversed();
 [,java]
 ----
 /**
- * Streams example
- *
+ * Stream example
  * {@snippet :
- *     int sum = widgets.stream()
- *                      .filter(w -> w.getColor() == RED)
- *                      .mapToInt(w -> w.getWeight())
- *                      .sum();
+ * widgets.stream()
+ *         .filter(w -> w.color() == Color.RED)
+ *         .mapToInt(Widget::weight)
+ *         .sum();
  * }
-*/
+ */
+----
+
+=== External Snippets
+
+[,java]
+----
+/**
+ * Stream example
+ * {@snippet file="StreamExample.java" region="example"}
+ */
+----
+
+[,java]
+----
+public class StreamExample {
+    void example(List<Widget> widgets) {
+        // @start region="example"
+        widgets.stream()
+                .filter(w -> w.color() == Color.RED)
+                .mapToInt(Widget::weight)
+                .sum();
+        // @end
+    }
+}
 ----
 
 === Other snippet improvements
 
-* External snippets (link to a separate file that contains the snippet)
 * Support for snippet validation from external tools
 * Highlighting in snippets
 
@@ -481,7 +502,7 @@ virtualThread2.join();
 
 == Emojis
 
-=== isEmoji method
+=== is emoji method
 
 [,java]
 ----
