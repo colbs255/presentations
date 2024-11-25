@@ -166,8 +166,8 @@ See https://openjdk.org/jeps/413[JEP 413: Code Snippets in Java Documentation]
 
 === Generational Hypothesis
 
-* An object that was just created is more likely to die (and be collected) than an object that has been around for a while
-* Garbage collectors take advantage of this by splitting the heap into a Young Generation and an Old generation
+* Most objects die shortly after creation
+* Garbage collectors take advantage of this by collecting young objects more often
 
 === Netflix Improvements
 
