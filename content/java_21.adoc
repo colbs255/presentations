@@ -176,7 +176,7 @@ image::https://miro.medium.com/v2/resize:fit:4800/format:webp/0*SCVt4VGlA517hZDi
 
 == Record Patterns
 
-=== Cleaner Code
+=== Basic Record Pattern
 
 [,java]
 ----
@@ -200,7 +200,7 @@ static void printSum(Object obj) {
 }
 ----
 
-=== Nested Record Patterns
+=== Nested Record Pattern
 
 * Pattern matching scales elegantly with more complicated object graphs
 
@@ -222,10 +222,10 @@ if (r instanceof Rect(ColoredPoint(Point p, Color c), var lr)) {
 .Before
 [,java]
 ----
-record Pair<U,V>(U u, V v) {}
+record Pair<U, V>(U u, V v) {}
 static Optional<Integer> sum_noPatternMatching(Object obj) {
     if (!(obj instanceof Pair)) { return Optional.empty(); }
-    Pair<?,?> pair = (Pair<?, ?>) obj;
+    Pair<?, ?> pair = (Pair<?, ?>) obj;
     if (!(pair.u() instanceof Integer)) { return Optional.empty(); }
     var u = (Integer) pair.u();
     if (!(pair.v() instanceof Integer)) { return Optional.empty(); }
@@ -237,7 +237,7 @@ static Optional<Integer> sum_noPatternMatching(Object obj) {
 .After
 [,java]
 ----
-record Pair<U,V>(U u, V v) {}
+record Pair<U, V>(U u, V v) {}
 static Optional<Integer> sum_PatternMatching(Object obj) {
     if (obj instanceof Pair(Integer u, Integer v)) {
         return Optional.of(u + v);
