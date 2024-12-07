@@ -84,7 +84,7 @@ list.reversed().stream()
 [,java]
 ----
 var list = new LinkedList<Integer>();
-list = list.reversed();
+list.reversed();
 ----
 
 == Code Snippets in Javadocs
