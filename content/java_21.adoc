@@ -7,7 +7,7 @@
 * Code snippets in Javadocs
 * Generational ZGC
 * Record Patterns
-* Improved switches
+* Pattern Matching for switch
 * Virtual Threads
 
 == Sequenced Collections
@@ -128,7 +128,7 @@ list = list.reversed();
 ----
 /**
  * Stream example
- * {@snippet file="StreamExample.java" region="example"}
+ * {@snippet class="StreamExample" region="example"}
  */
 ----
 
@@ -246,7 +246,7 @@ static Optional<Integer> sum_PatternMatching(Object obj) {
 }
 ----
 
-== Improved Switches
+== Pattern Matching for switch
 
 === Null Checks
 

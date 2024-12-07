@@ -14,9 +14,10 @@
 
 - good developers and you always document your code, so i know you will be excited for this one
 - today... gotta do the pre and the code tags
-- that's why i left these bullet points here
 - when designing an API, examples are one of the best things you can do
-- cover fast
+- intellij does basic autocompletion inside code snippets
+- external snippets allow you to write examples in a normal java file with code completion
+- if you set it up right, you can link to tests that actually compile
 
 == ZGC
 
