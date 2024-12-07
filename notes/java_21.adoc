@@ -2,22 +2,30 @@
 
 == Intro
 
-- overview
-- trying to give you an overview of everything, moving fast
+- Going to talk about all of the new features that were added to java 21 after java 17
+- Here are the topics we'll be discussing - note that I'm only discussing finalized features (nothing in preview)
+- Trying to give you an overview of everything, so I'll be moving fast in some parts, but we will have time for questions at the end
+- And if we don't have enough time for all questions, I can answer them later on slack
 
 == Sequenced
 
-- new interface
-- none of you will leave citadel, but if you happen to find yourself doing another interview, and they ask you to reverse a linked list
+- Let's start with sequence collections
+- new interface in java that adds methods like addFirst/Last, removeFirst/Last, etc
+- many collections have been retrofitted with this interface
+- it's not a game changer, but it definitely does a better job at communicating intent - no more minus 1 indexing
+- also has a reverse method that returns a view of the collection
+- note that this is not a copy of the collections it's a view - so if you modify the original collection it will show up in the view
+- Now I know we are never going to leave [place], but if theoretically you were interviewing again and they ask you to reverse a linked list... this is how you'd do it
 
 == Code snippets
 
-- good developers and you always document your code, so i know you will be excited for this one
-- today... gotta do the pre and the code tags
-- when designing an API, examples are one of the best things you can do
-- intellij does basic autocompletion inside code snippets
-- external snippets allow you to write examples in a normal java file with code completion
+- We are all good developers here and document our code, so i know you will be excited for this one
+- today... gotta do the pre and the code tags - I always have to lookup how to do it
+- java now has a built in snippet tag
+- intellij actually does basic autocompletion inside code snippets
+- what I think is pretty powerful is external snippets they allow you to write examples in a normal java file with code completion
 - if you set it up right, you can link to tests that actually compile
+- there are actually a lot of other features like highlighting but I'm not going to cover them because they're not the most interesting thing to discuss and it's easy to look them up
 
 == ZGC
 
