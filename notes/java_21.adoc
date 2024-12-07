@@ -29,15 +29,39 @@
 
 == ZGC
 
-- low latency garbage collector with sub ms pause times on TB size heaps
+- A little bit of background on GCs
+- JDK has several GCs that have different trade-offs between throughput, latency, and overhead
+- The default GC of the jdk is G1 which aims to have a good balance between latency and throughput
+- the Z Garbage Collector, focuses on low latency
+- sub ms pause times on TB size heaps
+- ZGC already exists - you can already use it, but java 21 makes it generational
+- I'm not going to go into how generational garbage collectors work
+- But the idea is most objects die shortly after creation
+- Think about creating a bunch of duration objects or optionals, these objects are usually not used outside of a function call
 - collect more frequently
-- not going to go into how generational garbage collectors work
-- when to use and when profile
+
+=== Netflix
+
+- Using the right GC can have significant performance benefits
+- I have just one example from a netflix blog post
+- What was really interesting is the throughput of ZGC was actually very comparable to G1
+- And that actually leads me to the most important point of GCs - you should just try different GCs for your app and profile them
 
 == Record patterns
 
 - where we get into more functional programming stuff
+- this is a basic record pattern example
+- you might be saying this doesn't look much better and I actually agree with you, this is a very simple example but we are going to build into something more powerful, just stick with me a bit longer
 - contrived example
+
+=== Nested
+
+- also enabled nested record patterns
+
+=== Declare what you want
+
+- speaks for itself - much more concise and does a better job of communicating intent
+- the compiler is essentially doing these checks for you behind the scenes
 
 == Switch
 

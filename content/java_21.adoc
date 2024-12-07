@@ -167,7 +167,8 @@ See https://openjdk.org/jeps/413[JEP 413: Code Snippets in Java Documentation]
 === Generational Hypothesis
 
 * Most objects die shortly after creation
-* Garbage collectors take advantage of this by collecting young objects more often
+* Garbage collectors take advantage of this by splitting objects into young and old generations
+* Perform more frequent collections on the younger generations
 
 === Netflix Improvements
 
@@ -178,6 +179,7 @@ image::https://miro.medium.com/v2/resize:fit:4800/format:webp/0*SCVt4VGlA517hZDi
 
 === Basic Record Pattern
 
+.Before
 [,java]
 ----
 record Point(int x, int y) {}
@@ -191,8 +193,11 @@ static void printSum(Object obj) {
 }
 ----
 
+.After
 [,java]
 ----
+record Point(int x, int y) {}
+
 static void printSum(Object obj) {
     if (obj instanceof Point(int x, int y)) {
         System.out.println(x+y);
