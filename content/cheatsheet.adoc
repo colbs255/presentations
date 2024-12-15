@@ -1,0 +1,31 @@
+= Cheatsheet
+
+== GC
+
+=== Pause Times
+
+- G1: 200 ms
+- ZGC
+
+== Threads
+
+|===
+| Platform | Virtual
+
+| Metadata
+| >2Kb
+| 200-300 Bytes
+|===
+
+=== Platform
+
+- stacks are stored in off-heap memory
+- stacks take ~1Mb of memory (configurable)
+- >2Kb metadata
+- Switching: 1-10 microseconds
+
+=== Virtual
+
+- 200-300Bytes of metadata
+- pay-as-you-go : on heap
+- 200 nanoseconds
