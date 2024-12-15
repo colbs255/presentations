@@ -1,11 +1,29 @@
 = Cheatsheet
 
+== Time Units
+
+`ms -> microseconds -> nanoseconds`
+
 == GC
 
 === Pause Times
 
+|===
+| | G1 | ZGC
+
+| Pause Times
+| 150-450 ms
+| 25-200 microseconds (1000x)
+
+| Heap size
+| 150 Gb
+| 16 Tb
+
+|===
+
+
 - G1: 200 ms
-- ZGC
+- ZGC: 25-100 microseconds
 
 == Threads
 
@@ -13,12 +31,12 @@
 | | Platform | Virtual
 
 | Stack Metadata
-| >2Kb
-| 200-300 Bytes
+| >2 Kb
+| 200-300 B (1000x)
 
 | Stack Size
-| 1Mb
-| Dynamic
+| 1 Mb
+| Pay-as-you go
 
 | Stack Location
 | Off-heap
@@ -26,6 +44,5 @@
 
 | Context Switching
 | 1-10 microseconds
-| ~200 nanoseconds
-
+| ~200 nanoseconds (50x)
 |===
