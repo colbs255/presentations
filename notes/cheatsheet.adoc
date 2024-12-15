@@ -12,7 +12,7 @@
 | | G1 | ZGC
 
 | Pause Times
-| 150-450 ms
+| 100ms to seconds
 | 25-200 microseconds (1000x)
 
 | Heap size
