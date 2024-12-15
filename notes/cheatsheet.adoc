@@ -10,23 +10,22 @@
 == Threads
 
 |===
-| Platform | Virtual
+| | Platform | Virtual
 
-| Metadata
+| Stack Metadata
 | >2Kb
 | 200-300 Bytes
 
+| Stack Size
+| 1Mb
+| Dynamic
+
+| Stack Location
+| Off-heap
+| On-heap
+
+| Context Switching
+| 1-10 microseconds
+| ~200 nanoseconds
+
 |===
-
-=== Platform
-
-- stacks are stored in off-heap memory
-- stacks take ~1Mb of memory (configurable)
-- >2Kb metadata
-- Switching: 1-10 microseconds
-
-=== Virtual
-
-- 200-300Bytes of metadata
-- pay-as-you-go : on heap
-- 200 nanoseconds
