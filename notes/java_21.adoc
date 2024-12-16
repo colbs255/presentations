@@ -65,9 +65,36 @@
 
 == Switch
 
-- exhaustive: add or remove
+- I think this is the coolest feature - it shows how Java is supporting more functional paradigms
+
+=== Null checks
+
+- pretty self explanatory - you can now add a null case in your switch
+- not a gamechanger but there is something cool about this that I'll show in a bit
+
+=== Case Guards
+
+- This allows you to add more conditions to your cases, leading to more readable code
+
+=== Basic Pattern Matching
+
+- They've basically moved the instanceof pattern matching into switches, leading to more concise code
 - Method is taking in a generic type and then doing things based on the specific type
-- nice side effect
+
+=== Exhaustive on sealed types
+
+- exhaustive: add or remove
+- alternative to visitor pattern that is often simpler, more concise, and more flexible
+
+=== Result Type
+
+- client can handle success and failure uniformly by pattern matching over the result
+- instead of handling success via return and various failure via catch blocks
+
+=== Backwards Compatibility
+
+- Basically, if you use any of the new features that I just mentioned in a switch statement - you get exhaustive checking
+- nice side effect of the null feature is you can get exhaustive checking in switch statements now
 
 == Virtual Threads
 
@@ -76,10 +103,16 @@
 - switch to virtual threads
 - do 1 Million threads
 - virtual memory maps large virtual address space to a limited amount of physical RAM, virtual threads map to a small number of OS threads.
-- Green threads share a single operating system thread through co-operative concurrency. The main benefit of coroutines and green threads is ease of implementation
 - When code running in a virtual thread calls a blocking I/O operation in the java.* API, the runtime performs a non-blocking OS call and automatically suspends the virtual thread until it can be resumed later
 - The JDK's virtual thread scheduler is a work-stealing ForkJoinPool that operates in FIFO mode
 - The parallelism of the scheduler is the number of platform threads available for the purpose of scheduling virtual threads. By default it is equal to the number of available processors, but it can be tuned with the system property jdk.virtualThreadScheduler.parallelism
 - ForkJoinPool is distinct from the common pool which is used, for example, in the implementation of parallel streams, and which operates in LIFO mode.
 - Virtual threads do not require or expect application code to explicitly hand control back to the scheduler; in other words, virtual threads are not cooperative
 - The scheduler does not currently implement time sharing for virtual threads. Time sharing is the forceful preemption of a thread that has consumed an allotted quantity of CPU time. While time sharing can be effective at reducing the latency of some tasks when there are a relatively small number of platform threads and CPU utilization is at 100%, it is not clear that time sharing would be as effective with a million virtual threads
+
+== Emojis
+
+- Ah, I saved the best for last
+- So I know the biggest complaint with java is that it's emoji utilities are pretty lackluster
+- I know - it's on the GPTW feedback
+- Well, now you have it - there's a utility for determining if a character is an emoji
