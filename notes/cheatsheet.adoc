@@ -21,10 +21,6 @@
 
 |===
 
-
-- G1: 200 ms
-- ZGC: 25-100 microseconds
-
 == Threads
 
 |===
