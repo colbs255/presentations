@@ -482,7 +482,6 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 * Cheap to create - *do not pool them*
 * Enable thread-per-request style computing
 * Near-optimal hardware utilization
-* Mounted on platform threads and unmounted on blocking operations
 
 === How do virtual threads work?
 
