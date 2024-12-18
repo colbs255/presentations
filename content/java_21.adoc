@@ -1,6 +1,20 @@
 = Java 21
 :figure-caption!:
 
+== Java Releases
+
+* Java 17: September 2021 (**LTS**)
+* Java 18: March 2022
+* Java 19: September 2022
+* Java 20: March 2023
+* Java 21: September 2023 (**LTS**)
+* Java 22: March 2024
+* Java 23: September 2024
+* Java 24: March 2025
+* Java 25: September 2025 (**LTS**)
+
+No... Java 21 does not mean released in 2021
+
 == What's new?
 
 * Sequenced Collections
@@ -9,6 +23,19 @@
 * Record Patterns
 * Pattern Matching for switch
 * Virtual Threads
+
+== Emojis
+
+=== is emoji method
+
+[,java]
+----
+String emoji = "Hello! 😄";
+String noEmoji = "Hello!";
+
+emoji.codePoints().anyMatch(Character::isEmoji); // true
+noEmoji.codePoints().anyMatch(Character::isEmoji); // false
+----
 
 == Sequenced Collections
 
@@ -293,6 +320,29 @@ static void testFooBarNew(String s) {
 }
 ----
 
+=== Backwards compatibility
+
+[quote, JEP 441: Pattern Matching for switch]
+All existing switch statements will compile unchanged. But if a switch statement uses any of the switch enhancements described in this JEP then the compiler will check that it is exhaustive.
+More precisely, exhaustiveness is required of any switch statement that uses pattern or null labels or whose selector expression is not one of the legacy types
+
+=== Trick for exhaustive switch statements
+
+[,java]
+----
+enum Color { RED, GREEN, BLUE }
+static void testExhaustiveSwitchStatement(Color c) {
+    // compiler performs exhaustive checking
+    // since we have a null case
+    switch (c) {
+        case null -> System.out.println("null");
+        case RED -> System.out.println("I am red");
+        case GREEN -> System.out.println("I am green");
+        // missing BLUE case, compiler will error
+    }
+}
+----
+
 === Case Guards
 
 .Before
@@ -420,29 +470,6 @@ switch (r) {
 }
 ----
 
-=== Backwards compatibility
-
-[quote, JEP 441: Pattern Matching for switch]
-All existing switch statements will compile unchanged. But if a switch statement uses any of the switch enhancements described in this JEP then the compiler will check that it is exhaustive.
-More precisely, exhaustiveness is required of any switch statement that uses pattern or null labels or whose selector expression is not one of the legacy types
-
-=== Trick for exhaustive switch statements
-
-[,java]
-----
-enum Color { RED, GREEN, BLUE }
-static void testExhaustiveSwitchStatement(Color c) {
-    // compiler performs exhaustive checking
-    // since we have a null case
-    switch (c) {
-        case null -> System.out.println("null");
-        case RED -> System.out.println("I am red");
-        case GREEN -> System.out.println("I am green");
-        // missing BLUE case, compiler will error
-    }
-}
-----
-
 == Virtual Threads
 
 === Platform threads
@@ -524,25 +551,4 @@ virtualThread2.join();
 * Synchronized block pinning is targeted to be fixed in JDK 24
 * Pinning affects scalability not correctness
 
-== Emojis
-
-=== is emoji method
-
-[,java]
-----
-String emoji = "Hello! 😄";
-String noEmoji = "Hello!";
-
-emoji.codePoints().anyMatch(Character::isEmoji); // true
-noEmoji.codePoints().anyMatch(Character::isEmoji); // false
-----
-
-== What's next for Java?
-
-* String Templates (removed from JDK 23)
-* Structured Concurrency
-* Foreign function and memory API
-* Unnamed patterns and variables
-* Unnamed classes and instance main methods
-* Scoped values
-* Vector API
+== Questions
