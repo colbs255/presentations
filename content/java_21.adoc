@@ -484,6 +484,15 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 * Near-optimal hardware utilization
 * Mounted on platform threads and unmounted on blocking operations
 
+=== How do virtual threads work?
+
+* Virtual thread gets assigned to a platform thread
+* When virtual thread calls a blocking I/O operation, the runtime
+    ** performs a non-blocking OS call
+    ** suspends the virtual thread
+* The platform thread can now be used for other virtual threads
+* When the operation finishes, the virtual thread is rescheduled
+
 === Virtual Thread API
 
 [,java]
