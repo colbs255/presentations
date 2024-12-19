@@ -243,12 +243,6 @@ static void testFooBarNew(String s) {
 }
 ----
 
-=== Backwards compatibility
-
-[quote, JEP 441: Pattern Matching for switch]
-All existing switch statements will compile unchanged. But if a switch statement uses any of the switch enhancements described in this JEP then the compiler will check that it is exhaustive.
-More precisely, exhaustiveness is required of any switch statement that uses pattern or null labels or whose selector expression is not one of the legacy types
-
 === Trick for exhaustive switch statements
 
 [,java]
