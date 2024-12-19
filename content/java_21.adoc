@@ -349,7 +349,7 @@ static String formatter(Object obj) {
 }
 ----
 
-=== Exhaustive switches on sealed types
+=== Exhaustive switches
 
 [,java]
 ----
