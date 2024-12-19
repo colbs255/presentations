@@ -405,6 +405,26 @@ static int testSealedExhaustive(S s) {
 }
 ----
 
+=== Result Type
+
+[,java]
+----
+sealed interface AsyncReturn<V> {
+    record Success<V>(V result) implements AsyncReturn<V> { }
+    record Failure<V>(Throwable cause) implements AsyncReturn<V> { }
+    record Timeout<V>() implements AsyncReturn<V> { }
+    record Interrupted<V>() implements AsyncReturn<V> { }
+}
+
+AsyncResult<V> r = future.get();
+switch (r) {
+    case Success(var result) -> ...
+    case Failure(Throwable cause) -> ...
+    case Timeout() -> ...
+    case Interrupted() -> ...
+}
+----
+
 === Expression Type
 
 [,java]
@@ -460,26 +480,6 @@ Expr simplify(Expr expr) {
         case Mult(Const(var v), var variable) when v == 1 -> variable;
         // ...
     };
-}
-----
-
-=== Result Type
-
-[,java]
-----
-sealed interface AsyncReturn<V> {
-    record Success<V>(V result) implements AsyncReturn<V> { }
-    record Failure<V>(Throwable cause) implements AsyncReturn<V> { }
-    record Timeout<V>() implements AsyncReturn<V> { }
-    record Interrupted<V>() implements AsyncReturn<V> { }
-}
-
-AsyncResult<V> r = future.get();
-switch (r) {
-    case Success(var result) -> ...
-    case Failure(Throwable cause) -> ...
-    case Timeout() -> ...
-    case Interrupted() -> ...
 }
 ----
 
