@@ -294,7 +294,7 @@ static void testNew(Object obj) {
 }
 ----
 
-=== Basic Record Pattern
+=== Record Pattern
 
 .Before
 [,java]
@@ -321,36 +321,6 @@ static void printSum(Object obj) {
     }
 }
 ----
-
-=== Declare what you want
-
-.Before
-[,java]
-----
-record Pair<U, V>(U u, V v) {}
-static Optional<Integer> sum_noPatternMatching(Object obj) {
-    if (!(obj instanceof Pair)) { return Optional.empty(); }
-    Pair<?, ?> pair = (Pair<?, ?>) obj;
-    if (!(pair.u() instanceof Integer)) { return Optional.empty(); }
-    var u = (Integer) pair.u();
-    if (!(pair.v() instanceof Integer)) { return Optional.empty(); }
-    var v = (Integer) pair.v();
-    return Optional.of(u + v);
-}
-----
-
-.After
-[,java]
-----
-record Pair<U, V>(U u, V v) {}
-static Optional<Integer> sum_PatternMatching(Object obj) {
-    if (obj instanceof Pair(Integer u, Integer v)) {
-        return Optional.of(u + v);
-    }
-    return Optional.empty();
-}
-----
-
 
 === Basic Pattern Matching
 
