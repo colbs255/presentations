@@ -405,13 +405,61 @@ static int testSealedExhaustive(S s) {
 }
 ----
 
-=== Optional
+=== Expression Type
 
 [,java]
 ----
-sealed interface Opt<T> {
-    record Some<T>(T value) implements Opt<T> {}
-    record None<T>() implements Opt<T> {}
+sealed interface Expr {
+    record Const(int value) implements Expr { }
+    record Div(Expr left, Expr right) implements Expr { }
+    record Abs(Expr expression) implements Expr { }
+    record Var(String name) implements Expr { }
+}
+----
+
+=== Evaluate the expression
+
+[,java]
+----
+int evaluate(Expr expr, Map<String, Integer> variableBindings) {
+    return switch (expr) {
+        case null -> throw new IllegalArgumentException("Null expression");
+        case Const(var v) -> v;
+        case Var(var name) -> variableBindings.get(name);
+        case Abs(var inner) -> Math.abs(evaluate(inner, variableBindings));
+        case Div(var l, var r) when evaluate(r, variableBindings) == 0 -> throw new IllegalArgumentException("Can't divide by 0");
+        case Div(var l, var r) -> evaluate(l, variableBindings) / evaluate(r, variableBindings);
+    };
+}
+----
+
+=== Format the expression
+
+[,java]
+----
+String format(Expr expr) {
+    return switch (expr) {
+        case null -> "null";
+        case Const(var v) -> String.valueOf(v);
+        case Var(var name) -> name;
+        case Abs(var inner) -> "|%s|".formatted(format(inner));
+        case Div(var l, var r) -> "%s / %s".formatted(format(l), format(r));
+    };
+}
+----
+
+=== Simplify the expression
+
+[,java]
+----
+Expr simplify(Expr expr) {
+    return switch (expr) {
+        // v * 1
+        case Mult(var variable, Const(var v)) when v == 1 -> variable;
+        // 1 * v
+        case Mult(Const(var v), var variable) when v == 1 -> variable;
+        // ...
+    };
 }
 ----
 
