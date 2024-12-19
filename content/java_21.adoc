@@ -411,7 +411,7 @@ int evaluate(Expr expr, Map<String, Integer> varBindings) {
         case Abs(var inner)
                 -> Math.abs(evaluate(inner, varBindings));
         case Div(var l, var r) when evaluate(r, varBindings) == 0
-                -> throw new IllegalArgumentException("Can't divide by 0");
+                -> throw new IllegalArgumentException("Div by 0");
         case Div(var l, var r)
                 -> evaluate(l, varBindings) / evaluate(r, varBindings);
     };
