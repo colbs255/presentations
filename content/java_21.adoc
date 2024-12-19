@@ -214,6 +214,39 @@ image::https://miro.medium.com/v2/resize:fit:4800/format:webp/0*SCVt4VGlA517hZDi
 
 == Pattern Matching
 
+=== Basic Pattern Matching
+
+.Before
+[,java]
+----
+static String formatter(Object obj) {
+    if (obj instanceof Integer i) {
+        return String.format("int %d", i);
+    } else if (obj instanceof Long l) {
+        return String.format("long %d", l);
+    } else if (obj instanceof Double d) {
+        return String.format("double %f", d);
+    } else if (obj instanceof String s) {
+        return String.format("String %s", s);
+    }
+    return obj.toString();
+}
+----
+
+.After
+[,java]
+----
+static String formatter(Object obj) {
+    return switch (obj) {
+        case Integer i -> String.format("int %d", i);
+        case Long l    -> String.format("long %d", l);
+        case Double d  -> String.format("double %f", d);
+        case String s  -> String.format("String %s", s);
+        default        -> obj.toString();
+    };
+}
+----
+
 === Null Checks
 
 .Before
@@ -313,39 +346,6 @@ static void printSum(Object obj) {
     if (obj instanceof Point(int x, int y)) {
         System.out.println(x+y);
     }
-}
-----
-
-=== Basic Pattern Matching
-
-.Before
-[,java]
-----
-static String formatter(Object obj) {
-    if (obj instanceof Integer i) {
-        return String.format("int %d", i);
-    } else if (obj instanceof Long l) {
-        return String.format("long %d", l);
-    } else if (obj instanceof Double d) {
-        return String.format("double %f", d);
-    } else if (obj instanceof String s) {
-        return String.format("String %s", s);
-    }
-    return obj.toString();
-}
-----
-
-.After
-[,java]
-----
-static String formatter(Object obj) {
-    return switch (obj) {
-        case Integer i -> String.format("int %d", i);
-        case Long l    -> String.format("long %d", l);
-        case Double d  -> String.format("double %f", d);
-        case String s  -> String.format("String %s", s);
-        default        -> obj.toString();
-    };
 }
 ----
 
