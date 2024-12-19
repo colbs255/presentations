@@ -403,14 +403,17 @@ sealed interface Expr {
 
 [,java]
 ----
-int evaluate(Expr expr, Map<String, Integer> variableBindings) {
+int evaluate(Expr expr, Map<String, Integer> varBindings) {
     return switch (expr) {
-        case null -> throw new IllegalArgumentException("Null expression");
+        case null -> throw new IllegalArgumentException("...");
         case Const(var v) -> v;
-        case Var(var name) -> variableBindings.get(name);
-        case Abs(var inner) -> Math.abs(evaluate(inner, variableBindings));
-        case Div(var l, var r) when evaluate(r, variableBindings) == 0 -> throw new IllegalArgumentException("Can't divide by 0");
-        case Div(var l, var r) -> evaluate(l, variableBindings) / evaluate(r, variableBindings);
+        case Var(var name) -> varBindings.get(name);
+        case Abs(var inner)
+                -> Math.abs(evaluate(inner, varBindings));
+        case Div(var l, var r) when evaluate(r, varBindings) == 0
+                -> throw new IllegalArgumentException("Can't divide by 0");
+        case Div(var l, var r)
+                -> evaluate(l, varBindings) / evaluate(r, varBindings);
     };
 }
 ----
