@@ -415,24 +415,6 @@ sealed interface Opt<T> {
 }
 ----
 
-=== Binary Tree
-
-[,java]
-----
-sealed interface Tree<T> { 
-    record Nil<T>() implements Tree<T> { }
-    record Node<T>(Tree<T> left, T val, Tree<T> right) implements Tree<T> { }
-}
-
-static<T> boolean contains(Tree<T> tree, T target) { 
-    return switch (tree) { 
-        case Nil() -> false;
-        case Node(var left, var val, var right) -> 
-            target.equals(val) || left.contains(target) || right.contains(target);
-    };
-}
-----
-
 === Result Type
 
 [,java]
