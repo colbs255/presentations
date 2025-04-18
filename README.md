@@ -1,9 +1,3 @@
 # Presentations
 
-My presentations generated from code.
-Very early stage... still trying different things.
-
-## How to run?
-- Install `nix`
-- Run `nix develop` to setup dev environment
-- Run `make`
+This repo is deprecated and will be deleted soon. All slides have been moved to [colbs255/personal](https://github.com/colbs255/personal)
